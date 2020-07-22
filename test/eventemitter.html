@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+</body>
+<script>
+    // 事件触发器
+    class EventEmitter {
+        constructor() {
+            this.subs = Object.create(null);
+        }
+
+        $on(eventType, handler) {
+            // 如果没有注册过该事件，设置该事件为空数组
+            this.subs[eventType] = this.subs[eventType] || [];
+            this.subs[eventType].push(handler);
+        }   
+
+        $emit(eventType) {
+            if (this.subs[eventType]) {
+                this.subs[eventType].forEach(handler => {
+                    handler(); 
+                })
+            }
+        }
+    }
+
+    // test
+    let em = new EventEmitter();
+
+    em.$on('click', () => {
+        console.log('click then 1');
+    })
+    em.$on('click', () => {
+        console.log('click then 2');
+    })
+
+    em.$emit('click');
+</script>
+</html>

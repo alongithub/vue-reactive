@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">hello</div>
+</body>
+<script>
+    let data = {
+        msg: 'hello'
+    }
+
+    // 数据劫持
+    Object.defineProperty(data, 'msg', {
+        // 可枚举
+        enumerable: true,
+        // 可配置(可以使用delete删除)
+        configurable: true,
+
+        get() {
+            // 需要用一个新的字段保存实际的msg值，因为在get中如果访问msg会导致重复触发getter
+            console.log('get:', data._msg);
+            return data._msg;
+        },
+
+        set(newValue) {
+            console.log('set:', newValue);
+            if (newValue === data._msg) {
+                return;
+            }
+            data._msg = newValue;
+
+            document.querySelector('#app').textContent = data._msg;
+        }
+
+    })
+
+    // 测试
+    data.msg = 'hello world';
+    console.log(data.msg);
+</script>
+</html>
