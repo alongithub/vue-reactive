@@ -34,7 +34,14 @@ class Compiler {
             if (this.isDirective(attrName)) {
                 attrName = attrName.substr(2)
                 let key = attr.value; // v-text="msg" key = "msg"
-                this.update(node, key, attrName)
+                // 如果是v-on  v-on:click="count + 1"  ="onadd"
+                if (attrName.startsWith('on:')) {
+                    this.onHandler(node, key, attrName)
+                } else {
+                    this.update(node, key, attrName)
+                }
+
+                
             }
         })
         
@@ -64,6 +71,24 @@ class Compiler {
         // 实现双向绑定
         node.addEventListener('input', (e) => {
             this.vm[key] = node.value
+        })
+    }
+
+    // v-html
+    htmlUpdater(node, value, key) {
+        node.innerHTML = value;
+        new Watcher(this.vm, key, (newValue) => {
+            node.innerHTML = newValue
+        })
+    }
+
+    // v-on
+    onHandler(node, value, key) {
+        // 这里的key是事件类型 on:click
+        let event = key.substr(3) // click
+
+        node.addEventListener(event, () => {
+            this.vm.$options.methods && this.vm.$options.methods[value]()
         })
     }
 

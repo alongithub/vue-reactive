@@ -9,11 +9,19 @@
     <div id="app">
         <h1>msg {{msg}}</h1>
         <h1>count {{count}}</h1>
+        <hr/>
         v-text
         <div v-text="msg">v-text</div>
+        <hr/>
         v-model
         <input type="text" v-model="msg"/>
         <imput type="text" v-model="count"/>
+        <hr/>
+        v-html
+        <div v-html="msg"></div>
+        <hr/>
+        v-on
+        <button v-on:click="onClick">点击</button>
     </div>
 </body>
 <script src='./js/dep.js'></script>
@@ -30,6 +38,11 @@
             person: {
                 name: 'along',
                 age: 24
+            }
+        },
+        methods: {
+            onClick: () => {
+                console.log('click')
             }
         }
     })
